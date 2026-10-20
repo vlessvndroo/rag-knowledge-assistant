@@ -1,0 +1,6 @@
+google-genai
+psycopg[binary]
+pgvector
+numpy
+python-dotenv
+pytest
