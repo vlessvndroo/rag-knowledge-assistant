@@ -26,3 +26,9 @@ create index if not exists chunks_embedding_hnsw
 
 create index if not exists chunks_tsv_gin
     on chunks using gin (tsv);
+
+-- RLS on with no policies: tables are unreachable through Supabase's public
+-- Data API (anon/authenticated keys). The app connects as the table owner
+-- over the Postgres connection string, which bypasses RLS.
+alter table documents enable row level security;
+alter table chunks enable row level security;

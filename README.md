@@ -38,6 +38,7 @@ python -m rag.ingest data/raw/my-doc.md
 | Embeddings | `gemini-embedding-001`, 768 dims | Truncated output keeps storage small and fits pgvector's 2000-dim HNSW limit; vectors are L2-normalized after truncation |
 | Chunking | Paragraph packing, 1200 chars, 200 overlap | Keeps paragraphs intact; overlap protects facts that cross boundaries. To be tuned with evals |
 | Index | HNSW, cosine | Good recall/latency without training step (unlike IVFFlat) |
+| Access | RLS enabled, no policies | Tables are unreachable via the public Supabase Data API; the app connects as table owner over Postgres directly |
 
 ## Limitations
 
