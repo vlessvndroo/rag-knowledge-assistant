@@ -6,3 +6,5 @@ __pycache__/
 # Raw corpus stays local until anonymization is reviewed
 data/raw/*
 !data/raw/.gitkeep
+".supapass.txt" 
+".env" 
