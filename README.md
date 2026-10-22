@@ -13,7 +13,7 @@ evals. The docs are downloaded by a script rather than committed to this repo.
 ## Status
 
 - [x] Ingestion: markdown cleaning, chunking, Gemini embeddings stored in pgvector (53 docs, 206 chunks)
-- [ ] Semantic search endpoint
+- [x] Semantic search: CLI and `GET /search` endpoint (FastAPI)
 - [ ] `POST /ask` with cited answers
 - [ ] Hybrid search (vector + Postgres full-text, Reciprocal Rank Fusion)
 - [ ] Evaluation harness (recall@k, answer accuracy)
@@ -35,6 +35,17 @@ Run the files in `sql/` in order in the Supabase SQL editor.
 python scripts/download_corpus.py     # fetches the pinned n8n docs into data/raw/n8n
 python -m rag.ingest data/raw/n8n     # clean -> chunk -> embed -> store (idempotent)
 ```
+
+## Search
+
+```bash
+python -m rag.search "how do I loop over items?"     # CLI: top-5 chunks with similarity
+uvicorn rag.api:app --reload                          # API: open http://localhost:8000/docs
+```
+
+`GET /search?q=<question>&k=5` returns the `k` most similar chunks with page title, public URL
+and cosine similarity. Questions are embedded with `task_type=RETRIEVAL_QUERY` and chunks with
+`RETRIEVAL_DOCUMENT`, Gemini's asymmetric setup for short-question vs. long-passage matching.
 
 ## Technical decisions
 

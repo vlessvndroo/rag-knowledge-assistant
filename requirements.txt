@@ -5,3 +5,6 @@ numpy
 python-dotenv
 pytest
 pyyaml
+fastapi
+uvicorn
+httpx
