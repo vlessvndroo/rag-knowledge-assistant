@@ -12,7 +12,7 @@ evals. The docs are downloaded by a script rather than committed to this repo.
 
 ## Status
 
-- [x] Ingestion: markdown cleaning, chunking, Gemini embeddings stored in pgvector (53 docs, 206 chunks)
+- [x] Ingestion: markdown cleaning, chunking, Gemini embeddings stored in pgvector (53 docs, 197 chunks)
 - [x] Semantic search: CLI and `GET /search` endpoint (FastAPI)
 - [ ] `POST /ask` with cited answers
 - [ ] Hybrid search (vector + Postgres full-text, Reciprocal Rank Fusion)
@@ -52,7 +52,7 @@ and cosine similarity. Questions are embedded with `task_type=RETRIEVAL_QUERY` a
 | Decision | Choice | Why |
 |---|---|---|
 | Corpus | n8n docs subset, pinned commit | Public and verifiable: anyone can check answers against the official docs. Function-reference tables excluded (they retrieve poorly) |
-| Cleaning | Strip front matter, GitBook tags, anchors, link URLs | Removes tokens that carry no meaning; page title and public URL are kept as metadata for citations |
+| Cleaning | Strip front matter, GitBook tags, HTML images/tags, link URLs | Removes tokens that carry no meaning; page title and public URL are kept as metadata for citations. Index pages without a URL get one derived from their path |
 | Embeddings | `gemini-embedding-001`, 768 dims | Truncated output keeps storage small and fits pgvector's 2000-dim HNSW limit; vectors are L2-normalized after truncation |
 | Chunking | Paragraph packing, 1200 chars, 200 overlap | Keeps paragraphs intact; overlap protects facts that cross boundaries. To be tuned with evals |
 | Index | HNSW, cosine | Good recall/latency without training step (unlike IVFFlat) |
