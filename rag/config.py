@@ -10,6 +10,9 @@ DATABASE_URL = os.environ.get("DATABASE_URL", "")
 EMBEDDING_MODEL = "gemini-embedding-001"
 EMBEDDING_DIM = 768  # must match vector(768) in sql/001_init.sql
 
+# Pinned version, not "-latest": an alias that silently changes model would make eval runs incomparable.
+GENERATION_MODEL = "gemini-3.5-flash"
+
 # Chunking parameters, in characters. Tuned later by the evals harness (week 3).
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200

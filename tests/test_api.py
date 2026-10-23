@@ -21,3 +21,18 @@ def test_search_returns_hits(monkeypatch):
 def test_search_validates_params():
     assert client.get("/search", params={"q": "hi"}).status_code == 422  # too short
     assert client.get("/search", params={"q": "loop items", "k": 50}).status_code == 422  # k > 20
+
+
+def test_ask_returns_answer_with_sources(monkeypatch):
+    from rag.generation import Answer, Source
+
+    fake = Answer("Use the Merge node [1].", [Source(1, "Merge data", "https://docs.n8n.io/merge")])
+    monkeypatch.setattr(api, "ask", lambda q, k: fake)
+
+    resp = client.post("/ask", json={"question": "how do I merge data?"})
+
+    assert resp.status_code == 200
+    assert resp.json() == {
+        "answer": "Use the Merge node [1].",
+        "sources": [{"n": 1, "title": "Merge data", "url": "https://docs.n8n.io/merge"}],
+    }
